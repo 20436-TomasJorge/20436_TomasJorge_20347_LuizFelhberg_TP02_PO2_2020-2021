@@ -11,5 +11,6 @@ package pt.ipbeja.estig.po2.boulderdash;
 public class Board {
 
     private AbstractPosition board[][];
+    //teste
 
 }
