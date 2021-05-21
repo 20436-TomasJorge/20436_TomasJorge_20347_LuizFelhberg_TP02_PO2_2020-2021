@@ -1,4 +1,4 @@
-package pt.ipbeja.estig.po2.boulderdash;
+package pt.ipbeja.estig.po2.boulderdash.model;
 
 /**
  * @author Tomás Jorge
@@ -6,5 +6,5 @@ package pt.ipbeja.estig.po2.boulderdash;
  * @number 20436
  */
 
-public class Boulder {
+public class Wall {
 }

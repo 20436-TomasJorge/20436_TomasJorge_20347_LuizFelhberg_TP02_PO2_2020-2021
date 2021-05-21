@@ -1,4 +1,4 @@
-package pt.ipbeja.estig.po2.boulderdash;
+package pt.ipbeja.estig.po2.boulderdash.model;
 
 /**
  * @author Tomás Jorge
