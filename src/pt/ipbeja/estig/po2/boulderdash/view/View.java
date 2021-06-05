@@ -1,4 +1,8 @@
-package pt.ipbeja.estig.po2.boulderdash.model;
+package pt.ipbeja.estig.po2.boulderdash.view;
+
+import pt.ipbeja.estig.po2.boulderdash.model.AbstractPosition;
+
+import java.util.List;
 
 /**
  * @author Tomás Jorge

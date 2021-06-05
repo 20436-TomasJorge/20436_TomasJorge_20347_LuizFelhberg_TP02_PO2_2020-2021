@@ -1,7 +1,5 @@
 package pt.ipbeja.estig.po2.boulderdash.model;
 
-import pt.ipbeja.estig.po2.boulderdash.gui.AbstractPosition;
-
 /**
  * @author Tomás Jorge
  * @version 15/05/2021
@@ -9,4 +7,5 @@ import pt.ipbeja.estig.po2.boulderdash.gui.AbstractPosition;
  */
 
 public class FreeTunnel extends AbstractPosition {
+
 }
