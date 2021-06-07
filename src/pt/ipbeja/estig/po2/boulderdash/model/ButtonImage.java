@@ -13,16 +13,16 @@ import javafx.scene.image.ImageView;
 public class ButtonImage extends ImageView {
 
     //private AbstractPosition position;
-    public final static int SIDE_SIZE = 30;
+    public final static int SIDE_SIZE = 50;
+    private final String image;
 
-    public ButtonImage() {
-        //this.position = position;
+    public ButtonImage(String image) {
+        this.image = image;
         this.setImage();
     }
 
     private void setImage() {
-        String filename = "/resources/images/diamond.png";
-        Image img = new Image(filename);
+        Image img = new Image(this.image);
         this.setImage(img);
         this.setFitHeight(SIDE_SIZE);
         this.setFitWidth(SIDE_SIZE);

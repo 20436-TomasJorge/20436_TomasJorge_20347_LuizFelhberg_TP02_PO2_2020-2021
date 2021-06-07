@@ -8,4 +8,11 @@ package pt.ipbeja.estig.po2.boulderdash.model;
 
 public class FreeTunnel extends AbstractPosition {
 
+    private final int line, col;
+
+    public FreeTunnel(int line, int col) {
+        super(line, col);
+        this.line = line;
+        this.col = col;
+    }
 }

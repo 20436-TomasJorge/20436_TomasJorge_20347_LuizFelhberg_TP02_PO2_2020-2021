@@ -24,18 +24,13 @@ public class ReadFile {
         this.separator = separator;
     }
 
-    public static String[][] readFileToStringArray2D(String filename, String separator) {
+    public String[][] readFileToStringArray2D(String filename, String separator) {
         try {
             List<String> linesNumber = Files.readAllLines(Paths.get(filename));
             String[][] allData = new String[linesNumber.size()][];
 
             for(int i = 0; i < linesNumber.size(); ++i) {
-                if (i == 0) {
-                    allData[i] = ((String)linesNumber.get(i)).split(" ");
-                }
-                else {
-                    allData[i] = ((String) linesNumber.get(i)).split(separator);
-                }
+                allData[i] = ((String) linesNumber.get(i)).split(separator);
             }
 
             return allData;
@@ -55,13 +50,13 @@ public class ReadFile {
 
     public int getLines() {
         String[][] s = readFileToStringArray2D(filename, separator);
-        return Integer.getInteger(s[0][0]);
+        return Integer.parseInt(s[0][0]);
     }
 
 
     public int getCols() {
         String[][] s = readFileToStringArray2D(filename, separator);
-        return Integer.getInteger(s[0][2]);
+        return Integer.parseInt(s[0][2]);
     }
 
 

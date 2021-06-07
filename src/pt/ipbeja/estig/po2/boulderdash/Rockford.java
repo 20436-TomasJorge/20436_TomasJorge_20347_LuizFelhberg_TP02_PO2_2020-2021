@@ -11,12 +11,16 @@ package pt.ipbeja.estig.po2.boulderdash;
 public class Rockford {
 
     private static Rockford instace = null;
+    private static int line, col;
 
-    protected Rockford() {}
+    protected Rockford(int line, int col) {
+        this.line = line;
+        this.col = col;
+    }
 
     public static Rockford getInstance() {
         if(instace == null) {
-            instace = new Rockford();
+            instace = new Rockford(line, col);
         }
         return instace;
     }

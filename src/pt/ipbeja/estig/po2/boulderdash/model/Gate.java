@@ -6,5 +6,9 @@ package pt.ipbeja.estig.po2.boulderdash.model;
  * @number 20436
  */
 
-public class Gate {
+public class Gate extends AbstractPosition {
+
+    public Gate(int line, int col) {
+        super(line, col);
+    }
 }

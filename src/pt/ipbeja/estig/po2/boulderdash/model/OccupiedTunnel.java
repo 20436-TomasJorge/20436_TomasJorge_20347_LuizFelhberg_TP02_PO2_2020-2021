@@ -6,5 +6,13 @@ package pt.ipbeja.estig.po2.boulderdash.model;
  * @number 20436
  */
 
-public class OccupiedTunnel {
+public class OccupiedTunnel extends AbstractPosition{
+
+    private final int line, col;
+
+    public OccupiedTunnel(int line, int col) {
+        super(line, col);
+        this.line = line;
+        this.col = col;
+    }
 }

@@ -10,10 +10,13 @@ import javafx.scene.image.ImageView;
  * @number 20436
  */
 
-public abstract class AbstractPosition{
+public abstract class AbstractPosition {
 
-    public AbstractPosition() {
+    private int line, col;
 
+    public AbstractPosition(int line, int col) {
+        this.line = line;
+        this.col = col;
     }
 }
 
