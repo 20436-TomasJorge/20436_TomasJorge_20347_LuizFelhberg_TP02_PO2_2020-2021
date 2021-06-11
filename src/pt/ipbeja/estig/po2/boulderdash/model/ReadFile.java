@@ -11,6 +11,11 @@ import javafx.scene.control.Alert;
  * @author Tomás Jorge
  * @version 21/05/2021
  * @number 20436
+ * ---------------------
+ * Class that has a method that allows reading a file to
+ * a 2D String array, also lets you get information about
+ * this is what is in the file, like the number of columns
+ * the board will have
  */
 
 public class ReadFile {
@@ -19,23 +24,30 @@ public class ReadFile {
     private final String filename;
     private final String separator;
 
+    /**
+     * Constructor to save the filename and the separator
+     * if you need to use the getter's methods
+     */
     public ReadFile(String filename, String separator) {
         this.filename = filename;
         this.separator = separator;
     }
 
-    public static String[][] readFileToStringArray2D(String filename, String separator) {
+    /**
+     * Method used in last semester's project in Introdução à Programação
+     * --------------
+     * @param filename -> mention the location and name of the file to be read
+     * @param separator -> how do you want to split the file
+     * @return String array in 2D
+     */
+    public String[][] readFileToStringArray2D(String filename, String separator) {
+        filename = "C:\\Users\\Utilizador\\Desktop\\IPB\\1º Ano\\2º Semestre\\Programação Objetos\\v2_20436_TomasJorge_20347_LuizFelhberg_TP02_PO2_2020-2021\\src\\resources\\files\\" + filename;
         try {
             List<String> linesNumber = Files.readAllLines(Paths.get(filename));
             String[][] allData = new String[linesNumber.size()][];
 
             for(int i = 0; i < linesNumber.size(); ++i) {
-                if (i == 0) {
-                    allData[i] = ((String)linesNumber.get(i)).split(" ");
-                }
-                else {
-                    allData[i] = ((String) linesNumber.get(i)).split(separator);
-                }
+                allData[i] = ((String) linesNumber.get(i)).split(separator);
             }
 
             return allData;
@@ -47,22 +59,34 @@ public class ReadFile {
         }
     }
 
-    private static void showError(String message) {
+    /**
+     * Method used in last semester's project in Introdução à Programação
+     * --------------
+     * @param message -> message to be displayed when path or filename is wrong
+     */
+    public void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setContentText(message);
         alert.showAndWait();
     }
 
+    /**
+     * Method to get the number of lines on the board
+     * --------------
+     * @return number of lines on the board
+     */
     public int getLines() {
         String[][] s = readFileToStringArray2D(filename, separator);
-        return Integer.getInteger(s[0][0]);
+        return Integer.parseInt(s[0][0]);
     }
 
-
+    /**
+     * Method to get the number of columns on the board
+     * --------------
+     * @return number of columns on the board
+     */
     public int getCols() {
         String[][] s = readFileToStringArray2D(filename, separator);
-        return Integer.getInteger(s[0][2]);
+        return Integer.parseInt(s[0][2]);
     }
-
-
 }

@@ -1,8 +1,4 @@
-package pt.ipbeja.estig.po2.boulderdash.view;
-
-import pt.ipbeja.estig.po2.boulderdash.model.AbstractPosition;
-
-import java.util.List;
+package pt.ipbeja.estig.po2.boulderdash.gui;
 
 /**
  * @author Tomás Jorge
@@ -11,9 +7,11 @@ import java.util.List;
  */
 public interface View {
 
+    boolean allDiamondsCaught();
+
     void levelPassed();
 
-    void gamelost();
+    void gameLost();
 
     void onBoardRockfordMove();
 }

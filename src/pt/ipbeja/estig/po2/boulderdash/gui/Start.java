@@ -1,9 +1,11 @@
-package pt.ipbeja.estig.po2.boulderdash.model;
+package pt.ipbeja.estig.po2.boulderdash.gui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import pt.ipbeja.estig.po2.boulderdash.model.Model;
 
 /**
  * @author Tomás Jorge
@@ -15,7 +17,9 @@ public class Start extends Application {
 
     private final String ICON_FILE = "/resources/images/icon.png";
 
-    //private Model model;
+    private Label timeLabel;
+
+    private Model model;
 
     public static void main(String[] args) {
         Application.launch();
@@ -23,7 +27,6 @@ public class Start extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
         Board gameBoard = new Board();
 
         Scene scene = new Scene(gameBoard);
@@ -32,7 +35,7 @@ public class Start extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        //this.model.startTimer();
+
     }
 
     private void setAppIcon(Stage stage, String filename) {
