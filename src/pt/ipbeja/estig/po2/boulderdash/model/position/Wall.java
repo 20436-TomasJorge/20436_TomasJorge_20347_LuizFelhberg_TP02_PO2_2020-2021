@@ -1,7 +1,7 @@
-package pt.ipbeja.estig.po2.boulderdash.model;
+package pt.ipbeja.estig.po2.boulderdash.model.position;
 
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import pt.ipbeja.estig.po2.boulderdash.model.position.AbstractPosition;
 
 /**
  * @author Tomás Jorge

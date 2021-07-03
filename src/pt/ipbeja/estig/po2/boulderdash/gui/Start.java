@@ -17,19 +17,18 @@ public class Start extends Application {
 
     private final String ICON_FILE = "/resources/images/icon.png";
 
-    private Label timeLabel;
-
-    private Model model;
-
     public static void main(String[] args) {
         Application.launch();
     }
 
+    Board gameBoard = new Board();
+
+    public static int countBoards = 0;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Board gameBoard = new Board();
 
-        Scene scene = new Scene(gameBoard);
+        Scene scene = gameBoard.createScene();
         this.setAppIcon(primaryStage, ICON_FILE);
         primaryStage.setTitle("Boulder Dash");
         primaryStage.setScene(scene);

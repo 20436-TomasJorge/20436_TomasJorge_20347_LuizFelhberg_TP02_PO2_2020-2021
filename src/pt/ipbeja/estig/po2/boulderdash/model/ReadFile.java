@@ -21,6 +21,7 @@ import javafx.scene.control.Alert;
 public class ReadFile {
 
 
+    private final String PATH = "src/resources/files/";
     private final String filename;
     private final String separator;
 
@@ -41,7 +42,7 @@ public class ReadFile {
      * @return String array in 2D
      */
     public String[][] readFileToStringArray2D(String filename, String separator) {
-        filename = "C:\\Users\\Utilizador\\Desktop\\IPB\\1º Ano\\2º Semestre\\Programação Objetos\\v2_20436_TomasJorge_20347_LuizFelhberg_TP02_PO2_2020-2021\\src\\resources\\files\\" + filename;
+        filename = PATH + filename;
         try {
             List<String> linesNumber = Files.readAllLines(Paths.get(filename));
             String[][] allData = new String[linesNumber.size()][];

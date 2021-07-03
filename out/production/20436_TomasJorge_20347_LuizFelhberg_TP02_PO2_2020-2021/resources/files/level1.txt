@@ -1,14 +1,11 @@
-4 5
-WWWWW
-WFOFW
-WOOGW
-WWWWW
+5 8
+WWWWWWWW
+WFOFWFWW
+WOOGWWWW
+WWOWWOOW
+WWWWWWWW
 J 1 2 % posição do jogador
 D 1 3 1 7 % dois diamantes nas posições (1, 5) e (1, 7)
 E 2 3 % um inimigo que se move aleatoriamente dentro das posições livres (chão livre)
 I 2 4 % posição com inimigo imóvel
 B 3 7 % um bónus de pontuação
-O % posição de túnel ocupada
-L % posição do túnel livre
-P % pedregulho
-G % posição do portão

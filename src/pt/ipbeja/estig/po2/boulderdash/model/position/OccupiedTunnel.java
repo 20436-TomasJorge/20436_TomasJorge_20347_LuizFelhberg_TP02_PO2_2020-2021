@@ -1,6 +1,7 @@
-package pt.ipbeja.estig.po2.boulderdash.model;
+package pt.ipbeja.estig.po2.boulderdash.model.position;
 
 import javafx.scene.image.Image;
+import pt.ipbeja.estig.po2.boulderdash.model.position.AbstractPosition;
 
 /**
  * @author Tomás Jorge
@@ -8,7 +9,7 @@ import javafx.scene.image.Image;
  * @number 20436
  */
 
-public class OccupiedTunnel extends AbstractPosition{
+public class OccupiedTunnel extends AbstractPosition {
 
     private final int line, col;
 

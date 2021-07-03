@@ -1,9 +1,9 @@
 package pt.ipbeja.estig.po2.boulderdash.model;
 
+import com.sun.javafx.scene.traversal.Direction;
+import pt.ipbeja.estig.po2.boulderdash.gui.Board;
 import pt.ipbeja.estig.po2.boulderdash.gui.View;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import pt.ipbeja.estig.po2.boulderdash.model.position.Rockford;
 
 /**
  * @author Tomás Jorge
@@ -20,11 +20,19 @@ public class Model {
     private final int lines = file.getLines();
     private final int cols = file.getCols();
 
-    private View view;
+    private final View view;
 
     public Model(View view) {
         this.view = view;
+    }
 
+    public void keyPressed(Direction direction) {
+        Rockford rockford = Rockford.getInstance();
+        rockford.rockfordMove(direction);
+    }
+
+    public Board getBoard() {
+        return new Board();
     }
 
     public int getLines() {

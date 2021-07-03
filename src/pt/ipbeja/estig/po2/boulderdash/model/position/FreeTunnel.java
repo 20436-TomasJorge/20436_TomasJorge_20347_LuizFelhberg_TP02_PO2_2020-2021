@@ -1,6 +1,7 @@
-package pt.ipbeja.estig.po2.boulderdash.model;
+package pt.ipbeja.estig.po2.boulderdash.model.position;
 
 import javafx.scene.image.Image;
+import pt.ipbeja.estig.po2.boulderdash.model.position.AbstractPosition;
 
 /**
  * @author Tomás Jorge
@@ -8,19 +9,19 @@ import javafx.scene.image.Image;
  * @number 20436
  */
 
-public class Gate extends AbstractPosition {
+public class FreeTunnel extends AbstractPosition {
 
     private final int line, col;
 
-    public Gate(int line, int col) {
+    public FreeTunnel(int line, int col) {
         super(line, col);
         this.line = line;
         this.col = col;
-        setImage();
+        this.setImage();
     }
 
     public void setImage() {
-        Image img = new Image("/resources/images/gate.png");
+        Image img = new Image("/resources/images/freeTunnel.png");
         this.setImage(img);
         this.setFitHeight(SIDE_SIZE);
         this.setFitWidth(SIDE_SIZE);
