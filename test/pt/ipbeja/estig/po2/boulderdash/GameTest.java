@@ -4,6 +4,8 @@ import com.sun.javafx.scene.traversal.Direction;
 import org.junit.jupiter.api.Test;
 import pt.ipbeja.estig.po2.boulderdash.gui.Board;
 import pt.ipbeja.estig.po2.boulderdash.model.Model;
+import pt.ipbeja.estig.po2.boulderdash.model.position.Boulder;
+import pt.ipbeja.estig.po2.boulderdash.model.position.FreeTunnel;
 import pt.ipbeja.estig.po2.boulderdash.model.position.Rockford;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,5 +62,10 @@ public class GameTest {
 
         assertEquals(lineBeforeMove, lineAfterMove);
         assertEquals(colBeforeMove, colAfterMove);
+    }
+
+    @Test
+    void teste3() {
+
     }
 }

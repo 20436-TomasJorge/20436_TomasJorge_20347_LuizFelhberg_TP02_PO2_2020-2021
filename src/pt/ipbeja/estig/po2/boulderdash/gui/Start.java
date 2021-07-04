@@ -22,7 +22,6 @@ public class Start extends Application {
     }
 
     Board gameBoard = new Board();
-
     public static int countBoards = 0;
 
     @Override

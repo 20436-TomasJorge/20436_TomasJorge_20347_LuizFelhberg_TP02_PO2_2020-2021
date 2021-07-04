@@ -15,7 +15,6 @@ public abstract class AbstractPosition extends ImageView {
     private final Model model = new Model(null);
     View view;
 
-    public final static int SIDE_SIZE = 50;
     private final int line, col;
 
     public AbstractPosition(int line, int col) {

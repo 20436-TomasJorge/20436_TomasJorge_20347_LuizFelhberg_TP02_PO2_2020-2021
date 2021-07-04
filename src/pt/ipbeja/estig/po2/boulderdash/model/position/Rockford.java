@@ -1,9 +1,10 @@
 package pt.ipbeja.estig.po2.boulderdash.model.position;
 
 import com.sun.javafx.scene.traversal.Direction;
+
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import pt.ipbeja.estig.po2.boulderdash.gui.Board;
-import pt.ipbeja.estig.po2.boulderdash.gui.View;
-import pt.ipbeja.estig.po2.boulderdash.model.Model;
 
 /**
  * @author Tomás Jorge
@@ -13,7 +14,7 @@ import pt.ipbeja.estig.po2.boulderdash.model.Model;
  *
  */
 
-public class Rockford {
+public class Rockford extends ImageView {
 
     private static Rockford instance = null;
 
@@ -68,6 +69,18 @@ public class Rockford {
 
     public int getCol() {
         return col;
+    }
+
+    public int getOldLine() {
+        return oldLine;
+    }
+
+    public int getOldCol() {
+        return oldCol;
+    }
+
+    public static Image getRockfordImage() {
+        return new Image("resources/images/rockford.png");
     }
 
     public static void setLine(int newLine) {

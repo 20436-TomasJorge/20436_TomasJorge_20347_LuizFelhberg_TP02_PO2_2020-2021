@@ -3,6 +3,8 @@ package pt.ipbeja.estig.po2.boulderdash.model.position;
 import javafx.scene.image.Image;
 import pt.ipbeja.estig.po2.boulderdash.model.position.AbstractPosition;
 
+import static pt.ipbeja.estig.po2.boulderdash.model.Model.SIDE_SIZE;
+
 /**
  * @author Tomás Jorge
  * @version 15/05/2021

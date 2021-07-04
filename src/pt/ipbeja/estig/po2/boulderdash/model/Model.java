@@ -3,7 +3,10 @@ package pt.ipbeja.estig.po2.boulderdash.model;
 import com.sun.javafx.scene.traversal.Direction;
 import pt.ipbeja.estig.po2.boulderdash.gui.Board;
 import pt.ipbeja.estig.po2.boulderdash.gui.View;
+import pt.ipbeja.estig.po2.boulderdash.model.position.Boulder;
 import pt.ipbeja.estig.po2.boulderdash.model.position.Rockford;
+
+import java.util.ArrayList;
 
 /**
  * @author Tomás Jorge
@@ -12,6 +15,8 @@ import pt.ipbeja.estig.po2.boulderdash.model.position.Rockford;
  */
 
 public class Model {
+
+    public final static int SIDE_SIZE = 50;
 
     public String filename = "level1.txt";
     public final String separator = "";
@@ -24,15 +29,6 @@ public class Model {
 
     public Model(View view) {
         this.view = view;
-    }
-
-    public void keyPressed(Direction direction) {
-        Rockford rockford = Rockford.getInstance();
-        rockford.rockfordMove(direction);
-    }
-
-    public Board getBoard() {
-        return new Board();
     }
 
     public int getLines() {

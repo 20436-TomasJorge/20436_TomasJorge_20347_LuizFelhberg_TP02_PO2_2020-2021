@@ -13,5 +13,5 @@ public interface View {
 
     void gameLost();
 
-    void onBoardRockfordMove(int line , int col);
+    void onBoardRockfordStart(int line , int col);
 }

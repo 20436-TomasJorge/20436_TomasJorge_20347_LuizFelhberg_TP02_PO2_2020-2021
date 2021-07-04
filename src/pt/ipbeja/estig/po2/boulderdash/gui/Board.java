@@ -5,12 +5,10 @@ import com.sun.javafx.scene.traversal.Direction;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import pt.ipbeja.estig.po2.boulderdash.model.position.*;
 import pt.ipbeja.estig.po2.boulderdash.model.*;
 
@@ -27,7 +25,6 @@ import java.util.Map;
 
 public class Board extends VBox implements View {
 
-
     private Gate gate;
     private Wall wall;
     private FreeTunnel freeTunnel;
@@ -36,8 +33,7 @@ public class Board extends VBox implements View {
     private int posLine = 0;
     private int posCol = 0;
 
-
-    private final Model model = new Model(this);
+    public final Model model = new Model(this);
     private final ReadFile file = new ReadFile(model.getFilename(), model.getSeparator());
 
     public AbstractPosition[][] buttons = new AbstractPosition[model.getLines()][model.getCols()];
@@ -53,11 +49,9 @@ public class Board extends VBox implements View {
     }
 
     public Board() {
-        positionOfMovingObjects();
     }
 
     public Scene createScene() {
-        VBox box = new VBox();
         this.getChildren().add(createBoard());
         Scene scene = new Scene(this);
         this.setKeyHandle(scene);
@@ -73,6 +67,9 @@ public class Board extends VBox implements View {
                 buttons[line][col] = objectType;
             }
         }
+        positionOfMovingObjects();
+        Rockford rockford = Rockford.getInstance();
+        buttons[rockford.getLine()][rockford.getCol()].setImage(Rockford.getRockfordImage());
         return pane;
     }
 
@@ -120,9 +117,12 @@ public class Board extends VBox implements View {
                 posLine = col;
             }
             if(posLine != 0 && posCol != 0) {
-                Rockford.setLine(Integer.parseInt(fileArray2D[line][posLine]));
-                Rockford.setCol(Integer.parseInt(fileArray2D[line][posCol]));
-                onBoardRockfordMove(Integer.parseInt(fileArray2D[line][posLine]), Integer.parseInt(fileArray2D[line][posCol]));
+                posLine = Integer.parseInt(fileArray2D[line][posLine]);
+                posCol = Integer.parseInt(fileArray2D[line][posCol]);
+                Rockford.setLine(posLine);
+                Rockford.setCol(posCol);
+                onBoardRockfordStart(posLine, posCol);
+                System.out.println(posLine  + " " + posCol);
                 posLine = 0;
                 posCol = 0;
             }
@@ -150,10 +150,25 @@ public class Board extends VBox implements View {
         scnMain.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                model.keyPressed(directionMap.get(event.getCode()));
+                keyPressed(directionMap.get(event.getCode()));
+                rockfordSetImage();
             };
         });
     }
+
+    private void rockfordSetImage() {
+        Rockford rockford = Rockford.getInstance();
+        buttons[rockford.getOldLine()][rockford.getOldCol()].setImage(FreeTunnel.getFreeTunnelImg());
+        buttons[rockford.getLine()][rockford.getCol()].setImage(Rockford.getRockfordImage());
+    }
+
+    private void keyPressed(Direction direction) {
+        Rockford rockford = Rockford.getInstance();
+        rockford.rockfordMove(direction);
+
+    }
+
+
 
     @Override
     public boolean allDiamondsCaught() {
@@ -185,10 +200,10 @@ public class Board extends VBox implements View {
     }
 
     @Override
-    public void onBoardRockfordMove(int line , int col){
+    public void onBoardRockfordStart(int line , int col){
         if(Start.countBoards == 0) {
             System.out.println("Rockford starting position {" + line + ", " + col + "}");
-            System.out.println("==========================\n");
+            System.out.println("=================================\n");
         }
         Start.countBoards++;
     }

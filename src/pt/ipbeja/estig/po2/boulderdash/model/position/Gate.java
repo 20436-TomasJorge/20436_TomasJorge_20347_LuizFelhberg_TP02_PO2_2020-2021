@@ -4,6 +4,8 @@ import javafx.scene.image.Image;
 import pt.ipbeja.estig.po2.boulderdash.gui.View;
 import pt.ipbeja.estig.po2.boulderdash.model.position.AbstractPosition;
 
+import static pt.ipbeja.estig.po2.boulderdash.model.Model.SIDE_SIZE;
+
 /**
  * @author Tomás Jorge
  * @version 15/05/2021
@@ -13,7 +15,6 @@ import pt.ipbeja.estig.po2.boulderdash.model.position.AbstractPosition;
 public class Gate extends AbstractPosition {
 
     private final int line, col;
-    Image img = new Image("/resources/images/freeTunnel.png");
 
     public Gate(int line, int col) {
         super(line, col);
@@ -23,6 +24,7 @@ public class Gate extends AbstractPosition {
     }
 
     private void setImage() {
+        Image img = new Image("/resources/images/freeTunnel.png");
         this.setImage(img);
         this.setFitHeight(SIDE_SIZE);
         this.setFitWidth(SIDE_SIZE);
@@ -36,7 +38,7 @@ public class Gate extends AbstractPosition {
         return col;
     }
 
-    public void levelPassedSetImage() {
-        img = new Image("/resources/images/gate.png");
+    public Image levelPassedSetImage() {
+        return new Image("/resources/images/gate.png");
     }
 }
