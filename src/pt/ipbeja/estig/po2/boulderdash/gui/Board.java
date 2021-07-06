@@ -2,6 +2,7 @@ package pt.ipbeja.estig.po2.boulderdash.gui;
 
 
 import com.sun.javafx.scene.traversal.Direction;
+import javafx.animation.FadeTransition;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -9,11 +10,18 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import pt.ipbeja.estig.po2.boulderdash.model.position.*;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import pt.ipbeja.estig.po2.boulderdash.model.pieces.*;
 import pt.ipbeja.estig.po2.boulderdash.model.*;
 
+import javax.swing.text.html.ImageView;
 import java.util.HashMap;
 import java.util.Map;
+
+import static pt.ipbeja.estig.po2.boulderdash.gui.Start.caughtDiamonds;
+import static pt.ipbeja.estig.po2.boulderdash.gui.Start.totalDiamonds;
+import static pt.ipbeja.estig.po2.boulderdash.model.Model.*;
 
 /**
  * @author Tomás Jorge
@@ -38,7 +46,7 @@ public class Board extends VBox implements View {
 
     public AbstractPosition[][] buttons = new AbstractPosition[model.getLines()][model.getCols()];
 
-    public final String[][] fileArray2D = file.readFileToStringArray2D(model.getFilename(), model.getSeparator());
+    private String[][] fileArray2D = file.readFileToStringArray2D(model.getFilename(), model.getSeparator());
 
     private static final Map<KeyCode, Direction> directionMap = new HashMap<>();
     static {
@@ -49,6 +57,7 @@ public class Board extends VBox implements View {
     }
 
     public Board() {
+        positionOfRockford();
     }
 
     public Scene createScene() {
@@ -67,83 +76,60 @@ public class Board extends VBox implements View {
                 buttons[line][col] = objectType;
             }
         }
-        positionOfMovingObjects();
-        Rockford rockford = Rockford.getInstance();
-        buttons[rockford.getLine()][rockford.getCol()].setImage(Rockford.getRockfordImage());
+        ImageOfMovingObjects();
+        buttons[Rockford.getLine()][Rockford.getCol()].setImage(Rockford.getRockfordImage());
         return pane;
     }
 
     private AbstractPosition getObjectType(int line, int col) {
-        if(line == 0 || line == model.getLines() - 1 ||
-                col == 0 || col == model.getCols() - 1 ||
-                fileArray2D[line + 1][col].equals("W")) {
-            wall = new Wall(line, col);
-            return wall;
+        if(line == 0 || line == model.getLines() - 1 || col == 0 || col == model.getCols() - 1
+                || fileArray2D[line + 1][col].equals("W")) {
+            return new Wall();
         }
         if(fileArray2D[line + 1][col].equals("F")) {
-            freeTunnel = new FreeTunnel(line, col);
-            return freeTunnel;
+            return new FreeTunnel();
         }
         if(fileArray2D[line + 1][col].equals("G")) {
-            gate = new Gate(line, col);
-            return gate;
+            return new Gate(line, col);
         }
-        occTunnel = new OccupiedTunnel(line, col);
-        return occTunnel;
+        return new OccupiedTunnel();
     }
 
-    public void positionOfMovingObjects() {
+    public void positionOfRockford() {
         int starterLine = Integer.parseInt(fileArray2D[0][0]) + 1;
         for (int line = starterLine; line < fileArray2D.length; line++) {
             for (int col = 0; col < fileArray2D[line].length; col++) {
                 if(col % 2 == 0 && fileArray2D[line][col].matches("-?\\d+")) {
-                    rockfordStartPosition(line, col);
+                    model.setPositionMovingObjects(line, col);
                 }
             }
         }
     }
 
-    /*private void setPositionMovingObjects(int line, int col) {
-        rockfordStartPosition(line, col);
-        bouldersPositions(line, col);
-    }*/
-
-    private void rockfordStartPosition(int line, int col) {
-        if(fileArray2D[line][0].equals("J")) {
-            if(col % 4 == 0) {
-                posCol = col;
-            }
-            else {
-                posLine = col;
-            }
-            if(posLine != 0 && posCol != 0) {
-                posLine = Integer.parseInt(fileArray2D[line][posLine]);
-                posCol = Integer.parseInt(fileArray2D[line][posCol]);
-                Rockford.setLine(posLine);
-                Rockford.setCol(posCol);
-                onBoardRockfordStart(posLine, posCol);
-                System.out.println(posLine  + " " + posCol);
-                posLine = 0;
-                posCol = 0;
-            }
+    public void ImageOfMovingObjects() {
+        for (int i = 0; i < boulderLines.size(); i++) {
+            buttons[boulderLines.get(i)][boulderCols.get(i)].setImage(Boulder.getBoulderImage());
+            buttons[diamondsLines.get(i)][diamondsCols.get(i)].setImage(Diamond.getBoulderImage());
         }
     }
 
-    private void bouldersPositions(int line, int col) {
-        if(fileArray2D[line][0].equals("J")) {}
-    }
 
     public boolean isPositionFree(int line, int col) {
-        boolean position = fileArray2D[line + 1][col].equals("F") ||
-                fileArray2D[line + 1][col].equals("O") || fileArray2D[line + 1][col].equals("G");
-        if(fileArray2D[line + 1][col].equals("F") ||
-                fileArray2D[line + 1][col].equals("O") || fileArray2D[line + 1][col].equals("G")) {
+        if(fileArray2D[line + 1][col].equals("F")
+                || fileArray2D[line + 1][col].equals("O") || fileArray2D[line + 1][col].equals("G")) {
+            for (int i = 0; i < boulderLines.size(); i++) {
+                if(line == boulderLines.get(i) && col == boulderCols.get(i)) {
+                    System.out.println("Boulder, BAD MOVE");
+                    return false;
+                }
+            }
             System.out.println("Free Position. GOOD MOVE");
+            return true;
         }
-        if(fileArray2D[line + 1][col].equals("W")) {
+        else {
             System.out.println("Wall, BAD MOVE");
+            return false;
         }
-        return position;
     }
 
     void setKeyHandle(Scene scnMain) {
@@ -152,41 +138,61 @@ public class Board extends VBox implements View {
             public void handle(KeyEvent event) {
                 keyPressed(directionMap.get(event.getCode()));
                 rockfordSetImage();
+                boulderBotPosFree();
+                model.rockfordCatchDiamond();
+                levelPassed();
             };
         });
-    }
-
-    private void rockfordSetImage() {
-        Rockford rockford = Rockford.getInstance();
-        buttons[rockford.getOldLine()][rockford.getOldCol()].setImage(FreeTunnel.getFreeTunnelImg());
-        buttons[rockford.getLine()][rockford.getCol()].setImage(Rockford.getRockfordImage());
     }
 
     private void keyPressed(Direction direction) {
         Rockford rockford = Rockford.getInstance();
         rockford.rockfordMove(direction);
-
     }
 
+    private void rockfordSetImage() {
+        buttons[Rockford.getOldLine()][Rockford.getOldCol()].setImage(FreeTunnel.getFreeTunnelImg());
+        buttons[Rockford.getLine()][Rockford.getCol()].setImage(Rockford.getRockfordImage());
+    }
 
+    private void boulderBotPosFree() {
+        for (int i = 0; i < boulderLines.size(); i++) {
+            for (int j = 0; j < boulderCols.size(); j++) {
+                if(String.valueOf(buttons[boulderLines.get(i) + 1][boulderCols.get(j)]).contains("FreeTunnel")){
+                    buttons[boulderLines.get(i) + 1][boulderCols.get(j)].setImage(Boulder.getBoulderImage());
+                    buttons[boulderLines.get(i)][boulderCols.get(j)] = new FreeTunnel();
+                    boulderLines.set(i, boulderLines.get(i) + 1);
+                }
+            }
+        }
+    }
 
     @Override
     public boolean allDiamondsCaught() {
-        /*if(getTotalDiamondsInGame ==  caughtdiamonds) {
-
-        }*/
-        return true;
+        System.out.println(caughtDiamonds);
+        if(totalDiamonds == caughtDiamonds) {
+            buttons[Gate.getLine()][Gate.getCol()].setImage(Gate.levelPassedSetImage());
+            FadeTransition blinkGate = new FadeTransition(Duration.seconds(1.5), buttons[Gate.getLine()][Gate.getCol()]);
+            blinkGate.play();
+            return true;
+        }
+        return false;
     }
 
     @Override
+    public boolean rockfordEntersTheDoor() {
+        return allDiamondsCaught() && Rockford.getLine() == Gate.getLine()
+                && Rockford.getCol() == Gate.getCol();
+    }
+
+
+    @Override
     public void levelPassed() {
-        if(allDiamondsCaught()) {
-            System.out.println(gate.getLine());
-            System.out.println(gate.getCol());
+        if(rockfordEntersTheDoor()) {
             int passedLevel = model.getLevel();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("Level " + passedLevel + "was Passed");
+            alert.setHeaderText("Level " + passedLevel + " was Passed");
             alert.setContentText("Good Luck on the Next Level");
             alert.showAndWait();
 

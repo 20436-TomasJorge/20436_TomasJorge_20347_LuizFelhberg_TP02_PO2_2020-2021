@@ -3,10 +3,7 @@ package pt.ipbeja.estig.po2.boulderdash;
 import com.sun.javafx.scene.traversal.Direction;
 import org.junit.jupiter.api.Test;
 import pt.ipbeja.estig.po2.boulderdash.gui.Board;
-import pt.ipbeja.estig.po2.boulderdash.model.Model;
-import pt.ipbeja.estig.po2.boulderdash.model.position.Boulder;
-import pt.ipbeja.estig.po2.boulderdash.model.position.FreeTunnel;
-import pt.ipbeja.estig.po2.boulderdash.model.position.Rockford;
+import pt.ipbeja.estig.po2.boulderdash.model.pieces.Rockford;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,36 +15,36 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
 
-    Board board = new Board();
     Rockford rockford = Rockford.getInstance();
+    Board board = new Board();
 
     @Test
     void test1() {
-        System.out.println("=============\nTest 1\n");
+        System.out.println("=============\nTest 1 - Move to a Free Position\n");
 
-        int lineBeforeMove = rockford.getLine();
-        int colBeforeMove = rockford.getCol();
+        int lineBeforeMove = Rockford.getLine();
+        int colBeforeMove = Rockford.getCol();
         System.out.println("line -> " + lineBeforeMove + " | col -> " + colBeforeMove);
 
-        boolean move = board.isPositionFree(lineBeforeMove, colBeforeMove + 1);
+        boolean move = board.isPositionFree(lineBeforeMove + 1, colBeforeMove);
         assertTrue(move);
 
-        rockford.rockfordMove(Direction.RIGHT);
+        rockford.rockfordMove(Direction.DOWN);
 
-        int lineAfterMove = rockford.getLine();
-        int colAfterMove = rockford.getCol();
+        int lineAfterMove = Rockford.getLine();
+        int colAfterMove = Rockford.getCol();
         System.out.println("\nMove to\nline -> " + lineAfterMove + " | col -> " + colAfterMove);
 
-        assertEquals(lineBeforeMove, lineAfterMove);
-        assertNotEquals(colBeforeMove, colAfterMove);
+        assertNotEquals(lineBeforeMove, lineAfterMove);
+        assertEquals(colBeforeMove, colAfterMove);
     }
 
     @Test
     void test2() {
-        System.out.println("\n=============\nTest 2\n");
+        System.out.println("\n=============\nTest 2 - Move to a position occupied by a Wall\n");
 
-        int lineBeforeMove = rockford.getLine();
-        int colBeforeMove = rockford.getCol();
+        int lineBeforeMove = Rockford.getLine();
+        int colBeforeMove = Rockford.getCol();
 
         System.out.println("line -> " + lineBeforeMove + " | col -> " + colBeforeMove + "\n");
 
@@ -56,8 +53,8 @@ public class GameTest {
 
         rockford.rockfordMove(Direction.UP);
 
-        int lineAfterMove = rockford.getLine();
-        int colAfterMove = rockford.getCol();
+        int lineAfterMove = Rockford.getLine();
+        int colAfterMove = Rockford.getCol();
         System.out.println("\nMove to\nline -> " + lineAfterMove + " | col -> " + colAfterMove);
 
         assertEquals(lineBeforeMove, lineAfterMove);
@@ -66,6 +63,23 @@ public class GameTest {
 
     @Test
     void teste3() {
+        System.out.println("\n=============\nTest 3 - Move to a position occupied by a Boulder\n");
 
+        int lineBeforeMove = Rockford.getLine();
+        int colBeforeMove = Rockford.getCol();
+
+        System.out.println("line -> " + lineBeforeMove + " | col -> " + colBeforeMove + "\n");
+
+        boolean move = board.isPositionFree(lineBeforeMove, colBeforeMove + 1);
+        assertFalse(move);
+
+        rockford.rockfordMove(Direction.RIGHT);
+
+        int lineAfterMove = Rockford.getLine();
+        int colAfterMove = Rockford.getCol();
+        System.out.println("\nMove to\nline -> " + lineAfterMove + " | col -> " + colAfterMove);
+
+        assertEquals(lineBeforeMove, lineAfterMove);
+        assertEquals(colBeforeMove, colAfterMove);
     }
 }

@@ -2,10 +2,8 @@ package pt.ipbeja.estig.po2.boulderdash.gui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import pt.ipbeja.estig.po2.boulderdash.model.Model;
 
 /**
  * @author Tomás Jorge
@@ -15,30 +13,31 @@ import pt.ipbeja.estig.po2.boulderdash.model.Model;
 
 public class Start extends Application {
 
-    private final String ICON_FILE = "/resources/images/icon.png";
+    public Board gameBoard = new Board();
+
+    public static int countBoards = 0;
+    public static int totalDiamonds = 0;
+    public static int caughtDiamonds = 0;
+
+    public static Stage stage;
 
     public static void main(String[] args) {
         Application.launch();
     }
 
-    Board gameBoard = new Board();
-    public static int countBoards = 0;
-
     @Override
     public void start(Stage primaryStage) throws Exception {
-
+        stage = primaryStage;
         Scene scene = gameBoard.createScene();
-        this.setAppIcon(primaryStage, ICON_FILE);
+        this.setAppIcon(primaryStage);
         primaryStage.setTitle("Boulder Dash");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
     }
 
-    private void setAppIcon(Stage stage, String filename) {
+    public void setAppIcon(Stage stage) {
         try {
-            Image ico = new Image(filename);
+            Image ico = new Image("/resources/images/icon.png");
             stage.getIcons().add(ico);
         } catch (Exception ex) {
         }

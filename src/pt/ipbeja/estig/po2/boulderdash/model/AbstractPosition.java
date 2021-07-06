@@ -1,4 +1,4 @@
-package pt.ipbeja.estig.po2.boulderdash.model.position;
+package pt.ipbeja.estig.po2.boulderdash.model;
 
 import javafx.scene.image.ImageView;
 import pt.ipbeja.estig.po2.boulderdash.gui.View;
@@ -15,11 +15,8 @@ public abstract class AbstractPosition extends ImageView {
     private final Model model = new Model(null);
     View view;
 
-    private final int line, col;
 
-    public AbstractPosition(int line, int col) {
-        this.line = line;
-        this.col = col;
+    public AbstractPosition() {
     }
 }
 

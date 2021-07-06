@@ -1,4 +1,4 @@
-package pt.ipbeja.estig.po2.boulderdash.model.position;
+package pt.ipbeja.estig.po2.boulderdash.model.pieces;
 
 import com.sun.javafx.scene.traversal.Direction;
 
@@ -11,7 +11,6 @@ import pt.ipbeja.estig.po2.boulderdash.gui.Board;
  * @number 20436
  * @version 12/05/2021
  * -------------------
- *
  */
 
 public class Rockford extends ImageView {
@@ -63,19 +62,19 @@ public class Rockford extends ImageView {
         System.out.println("Rockford position {" + line + ", " + col + "}\n");
     }
 
-    public int getLine() {
+    public static int getLine() {
         return line;
     }
 
-    public int getCol() {
+    public static int getCol() {
         return col;
     }
 
-    public int getOldLine() {
+    public static int getOldLine() {
         return oldLine;
     }
 
-    public int getOldCol() {
+    public static int getOldCol() {
         return oldCol;
     }
 
@@ -90,5 +89,4 @@ public class Rockford extends ImageView {
     public static void setCol(int newCol) {
         col = newCol;
     }
-
 }

@@ -1,8 +1,7 @@
-package pt.ipbeja.estig.po2.boulderdash.model.position;
+package pt.ipbeja.estig.po2.boulderdash.model.pieces;
 
 import javafx.scene.image.Image;
-import pt.ipbeja.estig.po2.boulderdash.gui.View;
-import pt.ipbeja.estig.po2.boulderdash.model.position.AbstractPosition;
+import pt.ipbeja.estig.po2.boulderdash.model.AbstractPosition;
 
 import static pt.ipbeja.estig.po2.boulderdash.model.Model.SIDE_SIZE;
 
@@ -14,12 +13,11 @@ import static pt.ipbeja.estig.po2.boulderdash.model.Model.SIDE_SIZE;
 
 public class Gate extends AbstractPosition {
 
-    private final int line, col;
+    private static int line, col;
 
-    public Gate(int line, int col) {
-        super(line, col);
-        this.line = line;
-        this.col = col;
+    public Gate(int gateLine, int gateCol) {
+        line = gateLine;
+        col = gateCol;
         setImage();
     }
 
@@ -30,15 +28,15 @@ public class Gate extends AbstractPosition {
         this.setFitWidth(SIDE_SIZE);
     }
 
-    public int getLine() {
+    public static int getLine() {
         return line;
     }
 
-    public int getCol() {
+    public static int getCol() {
         return col;
     }
 
-    public Image levelPassedSetImage() {
+    public static Image levelPassedSetImage() {
         return new Image("/resources/images/gate.png");
     }
 }

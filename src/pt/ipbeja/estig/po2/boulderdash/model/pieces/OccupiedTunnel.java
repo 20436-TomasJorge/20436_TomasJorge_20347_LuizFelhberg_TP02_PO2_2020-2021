@@ -1,7 +1,7 @@
-package pt.ipbeja.estig.po2.boulderdash.model.position;
+package pt.ipbeja.estig.po2.boulderdash.model.pieces;
 
 import javafx.scene.image.Image;
-import pt.ipbeja.estig.po2.boulderdash.model.position.AbstractPosition;
+import pt.ipbeja.estig.po2.boulderdash.model.AbstractPosition;
 
 import static pt.ipbeja.estig.po2.boulderdash.model.Model.SIDE_SIZE;
 
@@ -13,12 +13,8 @@ import static pt.ipbeja.estig.po2.boulderdash.model.Model.SIDE_SIZE;
 
 public class OccupiedTunnel extends AbstractPosition {
 
-    private final int line, col;
 
-    public OccupiedTunnel(int line, int col) {
-        super(line, col);
-        this.line = line;
-        this.col = col;
+    public OccupiedTunnel() {
         setImage();
     }
 

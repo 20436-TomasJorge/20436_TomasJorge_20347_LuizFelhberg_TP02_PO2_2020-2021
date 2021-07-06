@@ -9,7 +9,10 @@ public interface View {
 
     boolean allDiamondsCaught();
 
+    boolean rockfordEntersTheDoor();
+
     void levelPassed();
+
 
     void gameLost();
 

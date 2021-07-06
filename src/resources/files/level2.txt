@@ -1,0 +1,9 @@
+5 8
+WWWWWWWW
+WFOFOFOW
+WOOOFFOW
+WFOOOGOW
+WWWWWWWW
+J 1 2 % posição do jogador
+P 1 1 2 3 % posição dos pedregulhos
+D 1 3 3 4 % dois diamantes nas posições
