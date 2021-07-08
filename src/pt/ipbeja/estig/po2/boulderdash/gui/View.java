@@ -11,8 +11,9 @@ public interface View {
 
     boolean rockfordEntersTheDoor();
 
-    void levelPassed();
+    boolean levelPassed();
 
+    void changeLevel();
 
     void gameLost();
 

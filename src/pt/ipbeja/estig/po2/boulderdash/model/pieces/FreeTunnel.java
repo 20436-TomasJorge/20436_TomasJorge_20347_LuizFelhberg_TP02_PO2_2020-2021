@@ -28,4 +28,8 @@ public class FreeTunnel extends AbstractPosition {
     public static Image getFreeTunnelImg() {
         return img;
     }
+
+    public static String getFreeTunnelString() {
+        return img.toString();
+    }
 }

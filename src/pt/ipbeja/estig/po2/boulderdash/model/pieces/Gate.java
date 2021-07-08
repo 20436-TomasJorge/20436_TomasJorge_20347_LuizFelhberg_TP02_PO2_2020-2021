@@ -15,10 +15,10 @@ public class Gate extends AbstractPosition {
 
     private static int line, col;
 
-    public Gate(int gateLine, int gateCol) {
+    public Gate(int gateLine, int gateCol, String text) {
         line = gateLine;
         col = gateCol;
-        setImage();
+        if(!text.equals("Test")) setImage();
     }
 
     private void setImage() {
@@ -36,7 +36,7 @@ public class Gate extends AbstractPosition {
         return col;
     }
 
-    public static Image levelPassedSetImage() {
+    public static Image setGateImg() {
         return new Image("/resources/images/gate.png");
     }
 }

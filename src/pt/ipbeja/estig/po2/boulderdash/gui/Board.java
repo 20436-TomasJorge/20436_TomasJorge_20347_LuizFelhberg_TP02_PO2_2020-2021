@@ -2,25 +2,23 @@ package pt.ipbeja.estig.po2.boulderdash.gui;
 
 
 import com.sun.javafx.scene.traversal.Direction;
-import javafx.animation.FadeTransition;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.util.Duration;
+import javafx.scene.text.Text;
 import pt.ipbeja.estig.po2.boulderdash.model.pieces.*;
 import pt.ipbeja.estig.po2.boulderdash.model.*;
 
-import javax.swing.text.html.ImageView;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static pt.ipbeja.estig.po2.boulderdash.gui.Start.caughtDiamonds;
-import static pt.ipbeja.estig.po2.boulderdash.gui.Start.totalDiamonds;
+import static pt.ipbeja.estig.po2.boulderdash.gui.Start.*;
 import static pt.ipbeja.estig.po2.boulderdash.model.Model.*;
 
 /**
@@ -42,11 +40,17 @@ public class Board extends VBox implements View {
     private int posCol = 0;
 
     public final Model model = new Model(this);
-    private final ReadFile file = new ReadFile(model.getFilename(), model.getSeparator());
 
-    public AbstractPosition[][] buttons = new AbstractPosition[model.getLines()][model.getCols()];
+    private ReadFile file;
+    private String[][] fileArray2D;
+    public AbstractPosition[][] buttons;
 
-    private String[][] fileArray2D = file.readFileToStringArray2D(model.getFilename(), model.getSeparator());
+    public static ArrayList<Integer> boulderLines;
+    public static ArrayList<Integer> boulderCols;
+
+    public static ArrayList<Integer> diamondsLines;
+    public static ArrayList<Integer> diamondsCols;
+
 
     private static final Map<KeyCode, Direction> directionMap = new HashMap<>();
     static {
@@ -56,19 +60,119 @@ public class Board extends VBox implements View {
         directionMap.put(KeyCode.RIGHT, Direction.RIGHT);
     }
 
-    public Board() {
-        positionOfRockford();
+    public Board(){
+        initializeGlobalVariables();
+        if (model.countBoards == 0) {
+            positionOfMovingObjects();
+            model.totalDiamonds = diamondsLines.size();
+            model.countBoards = 1;
+
+            movesStage.setScene(setRockfordMoves());
+            movesStage.setTitle("Boulder Dash");
+            movesStage.setMinWidth(200);
+            movesStage.setMinHeight(400);
+            movesStage.show();
+        }
+    }
+
+    public Board(String text) {
+        initializeGlobalVariables();
+        System.out.println("\n================\n" +
+                    " This is a " + text +
+                    "\n================");
+        positionOfMovingObjects();
+        gatePosition();
+        model.totalDiamonds = diamondsLines.size();
+    }
+
+    private void initializeGlobalVariables() {
+        file = new ReadFile(model.getFilename(), model.getSeparator());
+        fileArray2D = file.readFileToStringArray2D(model.getFilename(), model.getSeparator());
+        buttons = new AbstractPosition[model.getLines()][model.getCols()];
+
+        boulderLines = new ArrayList<>();
+        boulderCols = new ArrayList<>();
+        diamondsLines = new ArrayList<>();
+        diamondsCols = new ArrayList<>();
+    }
+
+    private Scene setRockfordMoves() {
+        GridPane pane = new GridPane();
+        VBox vBox = new VBox();
+        vBox.getChildren().add(textMoves);
+        pane.getChildren().add(vBox);
+        return new Scene(pane);
     }
 
     public Scene createScene() {
-        this.getChildren().add(createBoard());
+        btnStart.setOnAction(event -> {
+            btnClicked++;
+            timer.schedule(task, 0, 1000);
+        });
+
+        this.getChildren().addAll(gameInfo(), createBoard());
         Scene scene = new Scene(this);
         this.setKeyHandle(scene);
         return scene;
     }
 
+    private HBox gameInfo() {
+        Text timerText = new Text(" Time:");
+        Text movesText = new Text("Moves:");
+        Text pointsText = new Text("Points:");
+
+        HBox timerBox = new HBox(5);
+        timerBox.getChildren().addAll(timerText, textTime);
+
+        HBox movesBox = new HBox(5);
+        movesBox.getChildren().addAll(movesText, nMoves);
+
+        HBox pointsBox = new HBox(5);
+        pointsBox.getChildren().addAll(pointsText, nPoints);
+
+        HBox hBox = new HBox(20);
+        hBox.getChildren().addAll(btnStart, btnNextLevel, timerBox, movesBox, pointsBox);
+
+        return hBox;
+    }
+
+
     private GridPane createBoard() {
         GridPane pane = new GridPane();
+        for (int line = 0; line < model.getLines(); line++) {
+            for (int col = 0; col < model.getCols(); col++) {
+                AbstractPosition objectType = getObjectType(line, col);
+                pane.add(objectType, col, line);
+                buttons[line][col] = objectType;
+            }
+        }
+        ImageOfMovingObjects();
+        buttons[Rockford.getLine()][Rockford.getCol()].setImage(Rockford.getRockfordImage());
+        return pane;
+    }
+
+    public Scene createNextLevelScene() {
+        this.getChildren().addAll(gameInfo(), createNewBoard());
+        Scene scene = new Scene(this);
+        this.setKeyHandle(scene);
+        return scene;
+    }
+
+    public GridPane createNewBoard() {
+        GridPane pane = new GridPane();
+        int newLevel = levelPassed + 1;
+        if(newLevel <= file.getNumberOfLevels()) {
+            model.setFilename(newLevel);
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Congratulations!! You finished the game");
+            alert.setContentText("Your best score was: " + bestScore);
+            alert.showAndWait();
+        }
+        file = new ReadFile(model.getFilename(), model.getSeparator());
+        fileArray2D = file.readFileToStringArray2D(model.getFilename(), model.getSeparator());
+        buttons = new AbstractPosition[model.getLines()][model.getCols()];
         for (int line = 0; line < model.getLines(); line++) {
             for (int col = 0; col < model.getCols(); col++) {
                 AbstractPosition objectType = getObjectType(line, col);
@@ -90,12 +194,22 @@ public class Board extends VBox implements View {
             return new FreeTunnel();
         }
         if(fileArray2D[line + 1][col].equals("G")) {
-            return new Gate(line, col);
+            return new Gate(line, col, "Main");
         }
         return new OccupiedTunnel();
     }
 
-    public void positionOfRockford() {
+    public void gatePosition() {
+        for (int line = 0; line < model.getLines(); line++) {
+            for (int col = 0; col < model.getCols(); col++) {
+                if (fileArray2D[line + 1][col].equals("G")) {
+                    new Gate(line, col, "Test");
+                }
+            }
+        }
+    }
+
+    public void positionOfMovingObjects() {
         int starterLine = Integer.parseInt(fileArray2D[0][0]) + 1;
         for (int line = starterLine; line < fileArray2D.length; line++) {
             for (int col = 0; col < fileArray2D[line].length; col++) {
@@ -108,27 +222,12 @@ public class Board extends VBox implements View {
 
     public void ImageOfMovingObjects() {
         for (int i = 0; i < boulderLines.size(); i++) {
-            buttons[boulderLines.get(i)][boulderCols.get(i)].setImage(Boulder.getBoulderImage());
-            buttons[diamondsLines.get(i)][diamondsCols.get(i)].setImage(Diamond.getBoulderImage());
+            buttons[boulderLines.get(i)][boulderCols.get(i)].
+                    setImage(Boulder.getBoulderImage());
         }
-    }
-
-
-    public boolean isPositionFree(int line, int col) {
-        if(fileArray2D[line + 1][col].equals("F")
-                || fileArray2D[line + 1][col].equals("O") || fileArray2D[line + 1][col].equals("G")) {
-            for (int i = 0; i < boulderLines.size(); i++) {
-                if(line == boulderLines.get(i) && col == boulderCols.get(i)) {
-                    System.out.println("Boulder, BAD MOVE");
-                    return false;
-                }
-            }
-            System.out.println("Free Position. GOOD MOVE");
-            return true;
-        }
-        else {
-            System.out.println("Wall, BAD MOVE");
-            return false;
+        for (int i = 0; i < diamondsCols.size(); i++) {
+            buttons[diamondsLines.get(i)][diamondsCols.get(i)].
+                    setImage(Diamond.getDiamondImage());
         }
     }
 
@@ -138,42 +237,108 @@ public class Board extends VBox implements View {
             public void handle(KeyEvent event) {
                 keyPressed(directionMap.get(event.getCode()));
                 rockfordSetImage();
-                boulderBotPosFree();
+                diamondFallFreePos();
+                boulderFallFreePos();
                 model.rockfordCatchDiamond();
-                levelPassed();
+                nPoints.setText(model.points + "");
+
+                changeLevel();
             };
         });
     }
 
-    private void keyPressed(Direction direction) {
+    public void keyPressed(Direction direction) {
         Rockford rockford = Rockford.getInstance();
         rockford.rockfordMove(direction);
+        setMovesAtScene += rockford.rockfordMovementText() + "\n";
+        textMoves.setText(setMovesAtScene);
     }
 
     private void rockfordSetImage() {
-        buttons[Rockford.getOldLine()][Rockford.getOldCol()].setImage(FreeTunnel.getFreeTunnelImg());
-        buttons[Rockford.getLine()][Rockford.getCol()].setImage(Rockford.getRockfordImage());
+        model.moves++;
+        nMoves.setText(model.moves + "");
+        buttons[Rockford.getOldLine()][Rockford.getOldCol()].
+                setImage(FreeTunnel.getFreeTunnelImg());
+        buttons[Rockford.getLine()][Rockford.getCol()].
+                setImage(Rockford.getRockfordImage());
     }
 
-    private void boulderBotPosFree() {
+    private void boulderFallFreePos() {
         for (int i = 0; i < boulderLines.size(); i++) {
-            for (int j = 0; j < boulderCols.size(); j++) {
-                if(String.valueOf(buttons[boulderLines.get(i) + 1][boulderCols.get(j)]).contains("FreeTunnel")){
-                    buttons[boulderLines.get(i) + 1][boulderCols.get(j)].setImage(Boulder.getBoulderImage());
-                    buttons[boulderLines.get(i)][boulderCols.get(j)] = new FreeTunnel();
-                    boulderLines.set(i, boulderLines.get(i) + 1);
-                }
+            if (boulderBottomLineIsFree(i)) {
+                buttons[boulderLines.get(i) + 1][boulderCols.get(i)].
+                        setImage(Boulder.getBoulderImage());
+                buttons[boulderLines.get(i)][boulderCols.get(i)].
+                        setImage(FreeTunnel.getFreeTunnelImg());
+                boulderLines.set(i, boulderLines.get(i) + 1);
             }
         }
     }
 
+    private boolean boulderBottomLineIsFree(int i) {
+        String imgString = buttons[boulderLines.get(i) + 1][boulderCols.get(i)].
+                getImage().toString();
+        return Rockford.getOldLine() == boulderLines.get(i) + 1
+                && Rockford.getOldCol() == boulderCols.get(i)
+                || imgString.equals(FreeTunnel.getFreeTunnelString());
+    }
+
+    private void diamondFallFreePos() {
+        for (int i = 0; i < diamondsLines.size(); i++) {
+            if (diamondBottomLineIsFree(i)) {
+                buttons[diamondsLines.get(i) + 1][diamondsCols.get(i)].
+                        setImage(Diamond.getDiamondImage());
+                buttons[diamondsLines.get(i)][diamondsCols.get(i)].
+                        setImage(FreeTunnel.getFreeTunnelImg());
+                setDiamondNewPos(i);
+            }
+        }
+    }
+
+    public void setDiamondNewPos(int i) {
+        diamondsLines.set(i, diamondsLines.get(i) + 1);
+    }
+
+    public boolean diamondBottomLineIsFree(int i) {
+        String imgString = "";
+        boolean freeLine = Rockford.getOldLine() == diamondsLines.get(i) + 1
+                && Rockford.getOldCol() == diamondsCols.get(i) && model.diamondCaught(i);
+        if(buttonsHaveImage()) {
+            imgString = buttons[diamondsLines.get(i) + 1][diamondsCols.get(i)].
+                    getImage().toString();
+            return freeLine || imgString.equals(FreeTunnel.getFreeTunnelString());
+        }
+        return freeLine;
+    }
+
+    private boolean buttonsHaveImage() {
+        ArrayList<Boolean> buttonsHaveImage = new ArrayList<>();
+        for (int line = 0; line < model.getLines(); line++) {
+            for (int col = 0; col < model.getCols(); col++) {
+                if(buttons[line][col] == null) buttonsHaveImage.add(false);
+                else buttonsHaveImage.add(true);
+            }
+        }
+        if(buttonsHaveImage.contains(false)) return false;
+        return true;
+    }
+
+    public Model getModel() {
+        return model;
+    }
+
+    private void resetTimers() {
+        timerValue = 0;
+        timer.cancel();
+        task.cancel();
+    }
+
     @Override
     public boolean allDiamondsCaught() {
-        System.out.println(caughtDiamonds);
-        if(totalDiamonds == caughtDiamonds) {
-            buttons[Gate.getLine()][Gate.getCol()].setImage(Gate.levelPassedSetImage());
-            FadeTransition blinkGate = new FadeTransition(Duration.seconds(1.5), buttons[Gate.getLine()][Gate.getCol()]);
-            blinkGate.play();
+        if(model.totalDiamonds == model.caughtDiamonds) {
+            if(buttonsHaveImage()) {
+                buttons[Gate.getLine()][Gate.getCol()].setImage(Gate.setGateImg());
+            }
             return true;
         }
         return false;
@@ -185,18 +350,31 @@ public class Board extends VBox implements View {
                 && Rockford.getCol() == Gate.getCol();
     }
 
-
     @Override
-    public void levelPassed() {
+    public boolean levelPassed() {
         if(rockfordEntersTheDoor()) {
             int passedLevel = model.getLevel();
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("Level " + passedLevel + " was Passed");
-            alert.setContentText("Good Luck on the Next Level");
-            alert.showAndWait();
+            System.out.println("Level " + passedLevel + " was Passed");
 
-            model.setFilename(passedLevel + 1);
+            if(buttonsHaveImage()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("Level " + passedLevel + " was Passed");
+                alert.setContentText("Good Luck on the Next Level");
+                alert.showAndWait();
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void changeLevel() {
+        if(levelPassed()) {
+            if(model.points > bestScore)  bestScore = model.points;
+            resetTimers();
+            levelPassed = model.getLevel();
         }
     }
 
@@ -207,10 +385,9 @@ public class Board extends VBox implements View {
 
     @Override
     public void onBoardRockfordStart(int line , int col){
-        if(Start.countBoards == 0) {
+        if(model.countBoards == 0) {
             System.out.println("Rockford starting position {" + line + ", " + col + "}");
             System.out.println("=================================\n");
         }
-        Start.countBoards++;
     }
 }

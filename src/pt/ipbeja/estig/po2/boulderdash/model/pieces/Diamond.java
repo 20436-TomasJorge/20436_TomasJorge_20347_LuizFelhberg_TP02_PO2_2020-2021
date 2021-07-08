@@ -12,7 +12,7 @@ public class Diamond {
 
     public Diamond() { }
 
-    public static Image getBoulderImage() {
+    public static Image getDiamondImage() {
         return new Image("resources/images/diamond.png");
     }
 }

@@ -1,9 +1,12 @@
 package pt.ipbeja.estig.po2.boulderdash.model;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import javafx.scene.control.Alert;
 
@@ -21,7 +24,7 @@ import javafx.scene.control.Alert;
 public class ReadFile {
 
 
-    private final String PATH = "src/resources/files/";
+    private final String PATH = "src/resources/files";
     private final String filename;
     private final String separator;
 
@@ -60,6 +63,10 @@ public class ReadFile {
         }
     }
 
+    public void createNewFile(String filename) {
+
+    }
+
     /**
      * Method used in last semester's project in Introdução à Programação
      * --------------
@@ -89,5 +96,17 @@ public class ReadFile {
     public int getCols() {
         String[][] s = readFileToStringArray2D(filename, separator);
         return Integer.parseInt(s[0][2]);
+    }
+
+    public int getNumberOfLevels() {
+        File file = new File(PATH);
+        File[] files = file.listFiles();
+        int count = 0;
+        if(files != null) {
+            for (File f : files) {
+                count++;
+            }
+        }
+        return count;
     }
 }

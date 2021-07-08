@@ -1,12 +1,8 @@
 package pt.ipbeja.estig.po2.boulderdash.model;
 
+import pt.ipbeja.estig.po2.boulderdash.gui.Board;
 import pt.ipbeja.estig.po2.boulderdash.gui.View;
 import pt.ipbeja.estig.po2.boulderdash.model.pieces.Rockford;
-
-import java.util.ArrayList;
-
-import static pt.ipbeja.estig.po2.boulderdash.gui.Start.caughtDiamonds;
-import static pt.ipbeja.estig.po2.boulderdash.gui.Start.totalDiamonds;
 
 /**
  * @author Tomás Jorge
@@ -18,20 +14,20 @@ public class Model {
 
     public final static int SIDE_SIZE = 50;
 
-    public String filename = "level1.txt";
+    public int countBoards = 0;
+    public int totalDiamonds = 0;
+    public int moves = 0;
+    public int points = 0;
+    public int caughtDiamonds = 0;
+
+    public String filename = "/level1.txt";
     public final String separator = "";
 
-    private final ReadFile file = new ReadFile(filename, separator);
-    private final int lines = file.getLines();
-    private final int cols = file.getCols();
+    private final ReadFile file = new ReadFile(getFilename(), separator);
+    public final int lines = file.getLines();
+    public final int cols = file.getCols();
 
     public final String[][] fileArray2D = file.readFileToStringArray2D(getFilename(), separator);
-
-    public static ArrayList<Integer> boulderLines = new ArrayList<>();
-    public static ArrayList<Integer> boulderCols = new ArrayList<>();
-
-    public static ArrayList<Integer> diamondsLines = new ArrayList<>();
-    public static ArrayList<Integer> diamondsCols = new ArrayList<>();
 
     private int posLine = 0;
     private int posCol = 0;
@@ -40,6 +36,25 @@ public class Model {
 
     public Model(View view) {
         this.view = view;
+    }
+
+    public boolean isPositionFree(int line, int col) {
+        if(fileArray2D[line + 1][col].equals("F")
+                || fileArray2D[line + 1][col].equals("O")
+                || fileArray2D[line + 1][col].equals("G")) {
+            for (int i = 0; i < Board.boulderLines.size(); i++) {
+                if(line == Board.boulderLines.get(i) && col == Board.boulderCols.get(i)) {
+                    System.out.println("Boulder. BAD MOVE");
+                    return false;
+                }
+            }
+            System.out.println("Free Position. GOOD MOVE");
+            return true;
+        }
+        else {
+            System.out.println("Wall. BAD MOVE");
+            return false;
+        }
     }
 
     public void setPositionMovingObjects(int line, int col) {
@@ -86,8 +101,8 @@ public class Model {
                 posCol = Integer.parseInt(fileArray2D[line][posCol]);
                 if(!fileArray2D[posLine + 1][posCol].equals("W") && (posLine != Rockford.getLine()
                         || posCol != Rockford.getCol())) {
-                    boulderLines.add(posLine);
-                    boulderCols.add(posCol);
+                    Board.boulderLines.add(posLine);
+                    Board.boulderCols.add(posCol);
                 }
                 else {
                     file.showError("Change boulder position in file");
@@ -110,9 +125,10 @@ public class Model {
                 posLine = Integer.parseInt(fileArray2D[line][posLine]);
                 posCol = Integer.parseInt(fileArray2D[line][posCol]);
                 if(!fileArray2D[posLine + 1][posCol].equals("W")) {
-                    diamondsLines.add(posLine);
-                    diamondsCols.add(posCol);
-                    totalDiamonds++;
+                    Board.diamondsLines.add(posLine);
+                    Board.diamondsCols.add(posCol);
+                    posLine = 0;
+                    posCol = 0;
                 }
                 else {
                     file.showError("Change diamond position in file");
@@ -124,11 +140,18 @@ public class Model {
     }
 
     public void rockfordCatchDiamond() {
-        for (int i = 0; i < diamondsLines.size(); i++) {
-            if (Rockford.getLine() == diamondsLines.get(i) && Rockford.getCol() == diamondsCols.get(i)) {
-                caughtDiamonds += 1;
+        for (int i = 0; i < Board.diamondsLines.size(); i++) {
+            if (diamondCaught(i)) {
+                caughtDiamonds++;
+                points += (100 * caughtDiamonds) - (5 * moves);
+                Board.diamondsLines.remove(i);
+                Board.diamondsCols.remove(i);
             }
         }
+    }
+
+    public boolean diamondCaught(int i) {
+        return Rockford.getLine() == Board.diamondsLines.get(i) && Rockford.getCol() == Board.diamondsCols.get(i);
     }
 
     public int getLines() {
@@ -137,14 +160,6 @@ public class Model {
 
     public int getCols() {
         return cols;
-    }
-
-    public String getSeparator() {
-        return separator;
-    }
-
-    public String getFilename() {
-        return filename;
     }
 
     public int getLevel() {
@@ -160,8 +175,19 @@ public class Model {
         return level;
     }
 
-    public void setFilename(int level) {
-        this.filename = "level" + level + ".txt";
+    public View getView() {
+        return view;
     }
 
+    public String getSeparator() {
+        return separator;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(int level) {
+        this.filename = "/level" + level + ".txt";
+    }
 }

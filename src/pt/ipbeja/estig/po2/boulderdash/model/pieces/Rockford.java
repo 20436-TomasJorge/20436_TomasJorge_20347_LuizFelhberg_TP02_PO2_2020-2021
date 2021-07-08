@@ -4,7 +4,7 @@ import com.sun.javafx.scene.traversal.Direction;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import pt.ipbeja.estig.po2.boulderdash.gui.Board;
+import pt.ipbeja.estig.po2.boulderdash.model.Model;
 
 /**
  * @author Tomás Jorge
@@ -16,11 +16,14 @@ import pt.ipbeja.estig.po2.boulderdash.gui.Board;
 public class Rockford extends ImageView {
 
     private static Rockford instance = null;
-
-    Board board = new Board();
+    Model model = new Model(null);
 
     private static int line, col;
     private static int oldLine, oldCol;
+
+    private static String[] alphabet = new String[] {"A", "B", "C", "D", "E",
+            "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+            "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 
     protected Rockford(int line, int col) {
         Rockford.line = line;
@@ -55,11 +58,20 @@ public class Rockford extends ImageView {
     }
 
     public void goToPosition() {
-        if(!board.isPositionFree(line, col)) {
+        if(!model.isPositionFree(line, col)) {
             line = oldLine;
             col = oldCol;
         }
-        System.out.println("Rockford position {" + line + ", " + col + "}\n");
+        System.out.println(rockfordMovementText() + "\n");
+    }
+
+    public String rockfordMovementText() {
+        String moves = "";
+        for (int i = 0; i < alphabet.length; i++) {
+            if(oldLine == i) moves = "rockford " + alphabet[i] + oldCol + " -> ";
+            if(line == i) moves += alphabet[i] + col;
+        }
+        return moves;
     }
 
     public static int getLine() {

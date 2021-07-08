@@ -2,7 +2,7 @@
 WWWWWWWW
 WFOFOFOW
 WOOOFFOW
-WFOOOGOW
+WWWOOGOW
 WWWWWWWW
 J 1 2 % posição do jogador
 P 1 1 2 3 % posição dos pedregulhos
