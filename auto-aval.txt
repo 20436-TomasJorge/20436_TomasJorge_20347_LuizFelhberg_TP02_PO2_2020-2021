@@ -1,0 +1,25 @@
+Auto-avaliação
+----------------------------
+@author Tomás Jorge, 20436
+@author Luiz Felhberg, 20347
+@version 13/07/2021
+----------------------------
+
+Horas -> entre 70 a 80 horas
+
+Requisitos cumpridos:
+    -> Requisitos Essênciais (completo)
+    -> Requisitos Não Essênciais:
+        - NE1 (Falta inimigos móveis)
+        - NE2 (Falta as vidas do jogador e a lista das 5 maiores pontuações)
+        - NE3 (Nada feito)
+        - NE4 (Completo)
+        - NE5 (Completo)
+        - NE6 (O Tempo inicia ao carregar num botão)
+        - NE7 (Nada feito)
+        - NE8 (Completo)
+
+Classificação: 12, o jogo apresenta-se incompleto e com alguns erros.
+    Por exemplo, ao mudar de nível o tabuleiro não fica exatamente como
+    devia. O tabuleiros destes niveis apenas se apresentam completamente
+    corretos se mudar-mos o código e inserir-mos o nome do ficheiro à mão.

@@ -1,9 +1,9 @@
 package pt.ipbeja.estig.po2.boulderdash.gui;
 
 /**
- * @author Tomás Jorge
+ * @author Tomás Jorge, 20436
+ * @author Luiz Felhberg, 20347
  * @version 21/05/2021
- * @number 20436
  */
 public interface View {
 
@@ -14,6 +14,8 @@ public interface View {
     boolean levelPassed();
 
     void changeLevel();
+
+    void gameWon();
 
     void gameLost();
 

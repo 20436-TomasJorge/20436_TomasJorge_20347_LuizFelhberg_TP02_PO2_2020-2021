@@ -7,6 +7,4 @@ WWWWWWWW
 J 1 2 % posição do jogador
 P 1 1 1 3 % posição dos pedregulhos
 D 2 3 3 6 % dois diamantes nas posições
-E 2 3 % um inimigo que se move aleatoriamente dentro das posições livres (chão livre)
-I 2 4 % posição com inimigo imóvel
-B 3 7 % um bónus de pontuação
+I 3 1 % posição com inimigo imóvel

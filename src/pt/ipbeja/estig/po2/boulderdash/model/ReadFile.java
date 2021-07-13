@@ -1,19 +1,17 @@
 package pt.ipbeja.estig.po2.boulderdash.model;
 
 import java.io.File;
+import java.util.List;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 import javafx.scene.control.Alert;
 
 /**
- * @author Tomás Jorge
+ * @author Tomás Jorge, 20436
+ * @author Luiz Felhberg, 20347
  * @version 21/05/2021
- * @number 20436
  * ---------------------
  * Class that has a method that allows reading a file to
  * a 2D String array, also lets you get information about
@@ -23,14 +21,17 @@ import javafx.scene.control.Alert;
 
 public class ReadFile {
 
-
+    // Global Variables
     private final String PATH = "src/resources/files";
     private final String filename;
     private final String separator;
+    // End of the Global Variables
 
     /**
      * Constructor to save the filename and the separator
-     * if you need to use the getter's methods
+     * ---------------------------------
+     * @param filename -> file level name to be read
+     * @param separator -> how do you want to split the file
      */
     public ReadFile(String filename, String separator) {
         this.filename = filename;
@@ -38,14 +39,15 @@ public class ReadFile {
     }
 
     /**
-     * Method used in last semester's project in Introdução à Programação
-     * --------------
-     * @param filename -> mention the location and name of the file to be read
+     * Method used and given by professors in the last semester's project in
+     * "Introdução à Programação"
+     * ---------------------------------
+     * @param filename -> file level name to be read
      * @param separator -> how do you want to split the file
      * @return String array in 2D
      */
     public String[][] readFileToStringArray2D(String filename, String separator) {
-        filename = PATH + filename;
+        filename = this.PATH + filename;
         try {
             List<String> linesNumber = Files.readAllLines(Paths.get(filename));
             String[][] allData = new String[linesNumber.size()][];
@@ -55,20 +57,17 @@ public class ReadFile {
             }
 
             return allData;
-        } catch (IOException var5) {
+        } catch (IOException exception) {
             String errorMessage = "Error reading file " + filename;
             showError(errorMessage);
-            System.out.println(errorMessage + " - Exception " + var5.toString());
+            System.out.println(errorMessage + " - Exception " + exception.toString());
             return new String[0][];
         }
     }
 
-    public void createNewFile(String filename) {
-
-    }
-
     /**
-     * Method used in last semester's project in Introdução à Programação
+     * Method used and given by professors in the last semester's project in
+     * "Introdução à Programação"
      * --------------
      * @param message -> message to be displayed when path or filename is wrong
      */
@@ -84,7 +83,7 @@ public class ReadFile {
      * @return number of lines on the board
      */
     public int getLines() {
-        String[][] s = readFileToStringArray2D(filename, separator);
+        String[][] s = this.readFileToStringArray2D(this.filename, " ");
         return Integer.parseInt(s[0][0]);
     }
 
@@ -94,12 +93,18 @@ public class ReadFile {
      * @return number of columns on the board
      */
     public int getCols() {
-        String[][] s = readFileToStringArray2D(filename, separator);
-        return Integer.parseInt(s[0][2]);
+        String[][] s = this.readFileToStringArray2D(this.filename, " ");
+        return Integer.parseInt(s[0][1]);
     }
 
+    /**
+     *
+     * get the number of levels in the path
+     * --------------
+     * @return number of levels
+     */
     public int getNumberOfLevels() {
-        File file = new File(PATH);
+        File file = new File(this.PATH);
         File[] files = file.listFiles();
         int count = 0;
         if(files != null) {
